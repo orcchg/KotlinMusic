@@ -1,0 +1,42 @@
+apply from: 'buildsystem/dependencies.gradle'
+
+buildscript {
+    ext.kotlinVersion = '1.1.0'
+
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.2.3'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+    }
+}
+
+allprojects {
+    apply from: "$rootProject.projectDir/buildsystem/module_buildscript.gradle"
+    apply from: "$rootProject.projectDir/buildsystem/preconfig.gradle"
+
+    repositories {
+        jcenter()
+        mavenCentral()
+//        maven { url "https://plugins.gradle.org/m2/" }
+//        maven { url 'https://repo1.maven.org/maven2' }
+    }
+
+    ext {
+        androidApplicationId = 'com.orcchg.dev.maxa.ktmusic'
+        androidVersionCode = 1
+        androidVersionName = "1.0.1"
+        testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
+        testApplicationId = 'com.orcchg.dev.maxa.ktmusic.test'
+    }
+}
+
+ext {
+    proguardPropertiesPath = "${rootProject.rootDir}/android-proguard-snippets/libraries"
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

@@ -1,0 +1,192 @@
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+//        maven { url "https://maven.fabric.io/public" }
+    }
+    dependencies {
+        classpath "com.fernandocejas.frodo:frodo-plugin:0.8.3"
+        classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
+//        classpath 'io.fabric.tools:gradle:1.+'
+        classpath 'me.tatarka:gradle-retrolambda:3.2.3'
+    }
+}
+
+repositories {
+    maven { url "https://dl.bintray.com/jlmd/maven" }  // animated circle loading view
+//    maven { url 'https://maven.fabric.io/public' }
+}
+
+apply plugin: 'com.android.application'
+apply plugin: 'com.fernandocejas.frodo'
+apply plugin: 'com.jakewharton.hugo'
+//apply plugin: 'io.fabric'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'me.tatarka.retrolambda'
+
+frodo {
+    enabled = true
+}
+
+List<String> sngLanguages = ['ba', 'be', 'bg', 'ce', 'cv', 'et',
+                             'kk', 'kv', 'lt', 'lv', 'mk', 'os',
+                             'pl', 'sah', 'sk', 'sl', 'tt', 'uk'];
+
+String listToJavaArray(List<String> list) {
+    String result = "";
+    list.each { item -> result += (result.empty ? "" : ",") + "\"${item}\"" }
+    return "{${result}}";
+}
+
+android {
+    def globalConfiguration = rootProject.extensions.getByName("ext")
+
+    compileSdkVersion globalConfiguration.getAt("androidCompileSdkVersion")
+    buildToolsVersion globalConfiguration.getAt("androidBuildToolsVersion")
+
+    defaultConfig {
+        minSdkVersion globalConfiguration.getAt("androidMinSdkVersion")
+        targetSdkVersion globalConfiguration.getAt("androidTargetSdkVersion")
+
+        applicationId globalConfiguration.getAt("androidApplicationId")
+        versionCode globalConfiguration.getAt("androidVersionCode")
+        versionName globalConfiguration.getAt("androidVersionName")
+        testInstrumentationRunner globalConfiguration.getAt("testInstrumentationRunner")
+        testApplicationId globalConfiguration.getAt("testApplicationId")
+
+        buildConfigField "String[]", "SNG_LANGUAGES", listToJavaArray(sngLanguages)
+
+        externalNativeBuild {
+            cmake {
+                cppFlags "-frtti -fexceptions"
+            }
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    packagingOptions {
+        exclude 'LICENSE.txt'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+    }
+
+    lintOptions {
+        quiet true
+        abortOnError false
+        ignoreWarnings true
+        disable 'InvalidPackage'            // Some libraries have issues with this.
+        disable 'OldTargetApi'              // Lint gives this warning but SDK 20 would be Android L Beta.
+        disable 'IconDensities'             // For testing purpose. This is safe to remove.
+        disable 'IconMissingDensityFolder'  // For testing purpose. This is safe to remove.
+    }
+
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
+        release {
+            debuggable false
+            minifyEnabled true
+            proguardFile "${rootProject.ext.proguardPropertiesPath}/proguard-androidannotations.pro"
+            proguardFile "${rootProject.ext.proguardPropertiesPath}/proguard-butterknife-7.pro"
+            proguardFile "${rootProject.ext.proguardPropertiesPath}/proguard-glide.pro"
+            proguardFile "${rootProject.ext.proguardPropertiesPath}/proguard-gson.pro"
+            proguardFile "${rootProject.ext.proguardPropertiesPath}/proguard-square-okhttp3.pro"
+            proguardFile "${rootProject.ext.proguardPropertiesPath}/proguard-square-okio.pro"
+            proguardFile "${rootProject.ext.proguardPropertiesPath}/proguard-project.pro"
+            proguardFile "${rootProject.ext.proguardPropertiesPath}/proguard-realm.pro"
+            proguardFile "${rootProject.ext.proguardPropertiesPath}/proguard-retrolambda.pro"
+            proguardFile "${rootProject.ext.proguardPropertiesPath}/proguard-rx-java.pro"
+            proguardFile "${rootProject.ext.proguardPropertiesPath}/proguard-square-retrofit2.pro"
+            proguardFile "${rootProject.ext.proguardPropertiesPath}/proguard-support-v7-appcompat.pro"
+            proguardFile "${rootProject.ext.proguardPropertiesPath}/proguard-support-v7-cardview.pro"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    productFlavors {
+        production {
+            // default
+        }
+    }
+
+    sourceSets {
+        main {
+            java.srcDirs += 'src/main/kotlin'
+            res.srcDirs = [
+                'src/main/res',
+                'src/main/res-screen/music/detail',
+                'src/main/res-screen/music/list'
+            ]
+        }
+    }
+
+    externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    def appDependencies = rootProject.ext.appDependencies
+    def testAppDependencies = rootProject.ext.testAppDependencies
+
+    appDependencies.each {
+        add(it.configuration, it.dependency, it.options)
+    }
+
+    testAppDependencies.each {
+        add(it.configuration, it.dependency, it.options)
+    }
+}
+
+/* Tasks */
+// ------------------------------------------------------------------------------------------------
+/**
+ * Performs before every build
+ */
+android.applicationVariants.all {
+    // ------------------------------------------
+    /**
+     * Copies values-ru/strings.xml to the rest of sng-language resource folders
+     */
+    variant -> variant.mergeResources.doFirst {
+        File tmpResDir = file(buildDir.absolutePath + '/tmp/res')
+        if (!tmpResDir.exists()) { tmpResDir.mkdirs() }
+        sngLanguages.each { language ->
+            File languageDir = file(tmpResDir.absolutePath + "/values-${language}")
+            if (!languageDir.exists()) { languageDir.mkdirs() }
+            copy {
+                from rootDir.absolutePath + '/app/src/main/res-main/values-ru/'
+                into languageDir.absolutePath
+            }
+        }
+        android.sourceSets['main'].res.srcDirs += tmpResDir.absolutePath
+    }
+
+    // ------------------------------------------
+    /**
+     * Makes apk-filename for release builds
+     */
+    def flavor = variant.mergedFlavor;
+    if (variant.buildType.name.equals("release")) {
+        variant.outputs.each { output ->
+            def flavorName = variant.name.replace("Release", "");
+            def name = flavorName + "-" + flavor.versionName + "-b" + flavor.versionCode + ".apk";
+            output.outputFile = new File(output.outputFile.parent, name);
+        }
+    } else if (variant.buildType.name.equals("debug")) {
+        flavor.versionName += "-" + variant.name + "-b" + flavor.versionCode;
+    }
+}

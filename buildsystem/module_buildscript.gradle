@@ -1,0 +1,12 @@
+apply from: "$rootProject.projectDir/buildsystem/version.gradle"
+
+buildscript {
+    ext.kotlinVersion = rootProject.ext.kotlinVersion
+
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+    }
+}

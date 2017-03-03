@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">8dp</dimen>
+
+    <dimen name="keyword_blob_radius">10dp</dimen>
+    <dimen name="keyword_blob_text_size">13dp</dimen>
+    <dimen name="keyword_block_title_text_size">16dp</dimen>
+
+    <dimen name="standard_bottom_padding">16dp</dimen>
+    <dimen name="standard_bottom_padding_mini">8dp</dimen>
+    <dimen name="standard_bottom_padding_small">12dp</dimen>
+    <dimen name="standard_button_text_size">16dp</dimen>
+    <dimen name="standard_description_text_size">16dp</dimen>
+    <dimen name="standard_icon_size">24dp</dimen>
+    <dimen name="standard_icon_big_size">48dp</dimen>
+    <dimen name="standard_icon_large_size">36dp</dimen>
+    <dimen name="standard_icon_micro_size">8dp</dimen>
+    <dimen name="standard_icon_small_size">18dp</dimen>
+    <dimen name="standard_fab_margin">10dp</dimen>
+    <dimen name="standard_panel_height">36dp</dimen>
+    <dimen name="standard_side_padding_dialog">20dp</dimen>
+    <dimen name="standard_side_padding">16dp</dimen>
+    <dimen name="standard_side_padding_avg">12dp</dimen>
+    <dimen name="standard_side_padding_mini">4dp</dimen>
+    <dimen name="standard_side_padding_plus_small">24dp</dimen>
+    <dimen name="standard_side_padding_plus_small_space">66dp</dimen>
+    <dimen name="standard_side_padding_small">8dp</dimen>
+    <dimen name="standard_space_width">42dp</dimen>
+    <dimen name="standard_thumbnail_size">80dp</dimen>
+    <dimen name="standard_thumbnail_size_small">56dp</dimen>
+    <dimen name="standard_thumbnail_container_height">112dp</dimen>
+    <dimen name="standard_thumbnail_small_container_height">72dp</dimen>
+    <dimen name="standard_subdesc_text_size">14dp</dimen>
+    <dimen name="standard_title_text_size">20dp</dimen>
+    <dimen name="standard_top_padding">20dp</dimen>
+    <dimen name="standard_top_padding_mini">8dp</dimen>
+    <dimen name="standard_top_padding_small">12dp</dimen>
+
+    <dimen name="dialog_side_margin">20dp</dimen>
+
+    <dimen name="toolbar_min_height">56dp</dimen>
+
+    <dimen name="floating_action_button_size_mini">40dp</dimen>
+    <dimen name="floating_action_button_size_normal">56dp</dimen>
+    <dimen name="floating_action_button_size_normal_borderless">74dp</dimen>
+
+    <dimen name="flow_layout_vertical_spacing">8dp</dimen>
+    <dimen name="flow_layout_horizontal_spacing">6dp</dimen>
+</resources>
