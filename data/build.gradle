@@ -14,8 +14,12 @@ apply plugin: 'com.jakewharton.hugo'
 apply plugin: 'realm-android'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
+//apply plugin: 'kotlin-kapt'
 apply plugin: 'me.tatarka.retrolambda'
+
+kapt {
+    generateStubs = true
+}
 
 android {
     def globalConfiguration = rootProject.extensions.getByName("ext")

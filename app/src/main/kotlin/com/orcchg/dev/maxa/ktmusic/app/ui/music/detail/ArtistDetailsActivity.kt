@@ -35,7 +35,7 @@ import com.orcchg.dev.maxa.ktmusic.utility.ui.ImageTransform
 
 class ArtistDetailsActivity : BaseActivity<ArtistDetailsContract.View, ArtistDetailsContract.Preseneter>(), ArtistDetailsContract.View {
 
-    @BindView(R.id.collapsing_toolbar) var collapsingToolbar: CollapsingToolbarLayout? = null  // disabled on tablets
+    @BindView(R.id.collapsing_toolbar) lateinit var collapsingToolbar: CollapsingToolbarLayout  // disabled on tablets
     @BindView(R.id.toolbar) lateinit var toolbar: Toolbar
     @BindView(R.id.pb_loading) lateinit var progressBar: ProgressBar
     @BindView(R.id.iv_cover) lateinit var coverImageView: ImageView

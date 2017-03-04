@@ -17,7 +17,7 @@ import com.orcchg.dev.maxa.ktmusic.app.ui.viewobject.ArtistListItemVO
 
 class ArtistViewHolder(view: View, val artistClickListener: ItemClickListener) : NormalViewHolder<ArtistListItemVO>(view) {
 
-    @BindView(R.id.fl_grid_item) internal var gridItemView: View? = null  // only on large screens
+    @BindView(R.id.fl_grid_item) lateinit var gridItemView: View  // only on large screens
     @BindView(R.id.pb_loading) lateinit var progressBar: ProgressBar
     @BindView(R.id.iv_cover) lateinit var iconView: ImageView
     @BindView(R.id.tv_musician_title) lateinit var titleView: TextView
