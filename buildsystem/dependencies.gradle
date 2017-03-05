@@ -36,6 +36,7 @@ ext {
             gson:                 "com.google.code.gson:gson:${gsonVersion}",
             javaxAnnotation:      "javax.annotation:jsr250-api:${javaxAnnotationVersion}",
             javaxInject:          "javax.inject:javax.inject:${javaxInjectVersion}",
+            kotterKnife:          "com.jakewharton:kotterknife:${kotterKnifeVersion}",
             leakCanary:           "com.squareup.leakcanary:leakcanary-android:${leakCanaryVersion}",
             mosby:                "com.hannesdorfmann.mosby:mvp:${mosbyVersion}",
             mosbyViewState:       "com.hannesdorfmann.mosby:viewstate:${mosbyVersion}",
@@ -106,16 +107,17 @@ ext {
             [configuration: "compile",  dependency: d_androidLibs.supportV13],
     ]
 
-    def autoValue = [
-            [configuration: "kapt",     dependency: d_libs.autoValue],
-            [configuration: "kapt",     dependency: d_libs.autoValueParcel],
-            [configuration: "provided", dependency: d_libs.autoValue],
-            [configuration: "provided", dependency: d_libs.autoValueGson],
-    ]
+//    def autoValue = [
+//            [configuration: "kapt",     dependency: d_libs.autoValue],
+//            [configuration: "kapt",     dependency: d_libs.autoValueParcel],
+//            [configuration: "provided", dependency: d_libs.autoValue],
+//            [configuration: "provided", dependency: d_libs.autoValueGson],
+//    ]
 
     def butterKnife = [
             [configuration: "kapt",     dependency: d_libs.butterKnifeCompiler],
             [configuration: "compile",  dependency: d_libs.butterKnife],
+            [configuration: "compile",  dependency: d_libs.kotterKnife],
     ]
 
     def dagger = [

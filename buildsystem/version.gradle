@@ -31,6 +31,7 @@ buildscript {
         gsonVersion = '2.8.0'
         javaxAnnotationVersion = '1.0'
         javaxInjectVersion = '1'
+        kotterKnifeVersion = '0.1.0-SNAPSHOT'
         materialDrawerVersion = '5.5.0@aar'
         mosbyVersion = '2.0.1'
         okHttpVersion = '3.4.1'

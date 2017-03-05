@@ -17,9 +17,10 @@ import android.view.Window
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
-import butterknife.BindView
-import butterknife.BindViews
 import butterknife.ButterKnife
+import butterknife.bindOptionalView
+import butterknife.bindView
+import butterknife.bindViews
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
@@ -28,6 +29,7 @@ import com.orcchg.dev.maxa.ktmusic.app.ui.base.BaseActivity
 import com.orcchg.dev.maxa.ktmusic.app.ui.base.common.view.misc.ViewUtility
 import com.orcchg.dev.maxa.ktmusic.app.ui.music.detail.injection.ArtistDetailsComponent
 import com.orcchg.dev.maxa.ktmusic.app.ui.music.detail.injection.ArtistDetailsModule
+import com.orcchg.dev.maxa.ktmusic.app.ui.music.detail.injection.DaggerArtistDetailsComponent
 import com.orcchg.dev.maxa.ktmusic.app.ui.viewobject.ArtistDetailsVO
 import com.orcchg.dev.maxa.ktmusic.domain.DomainConstant
 import com.orcchg.dev.maxa.ktmusic.utility.ui.CropType
@@ -35,26 +37,36 @@ import com.orcchg.dev.maxa.ktmusic.utility.ui.ImageTransform
 
 class ArtistDetailsActivity : BaseActivity<ArtistDetailsContract.View, ArtistDetailsContract.Preseneter>(), ArtistDetailsContract.View {
 
-    @BindView(R.id.collapsing_toolbar) lateinit var collapsingToolbar: CollapsingToolbarLayout  // disabled on tablets
-    @BindView(R.id.toolbar) lateinit var toolbar: Toolbar
-    @BindView(R.id.pb_loading) lateinit var progressBar: ProgressBar
-    @BindView(R.id.iv_cover) lateinit var coverImageView: ImageView
-    @BindView(R.id.tv_cover_error) lateinit var coverErrorTextView: TextView
-    @BindView(R.id.top_overlay) lateinit var topOverlayView: View
-    @BindView(R.id.bottom_overlay) lateinit var bottomOverlayView: View
-    @BindView(R.id.tv_description) lateinit var descriptionTextView: TextView
-    @BindView(R.id.tv_link) lateinit var linkTextView: TextView
-    @BindView(R.id.tv_genres) lateinit var genresTextView: TextView
-    @BindView(R.id.tv_tracks_count) lateinit var tracksCountTextView: TextView
-    @BindView(R.id.tv_albums_count) lateinit var albumsCountTextView: TextView
-    @BindViews(R.id.iv_star_1, R.id.iv_star_2, R.id.iv_star_3, R.id.iv_star_4, R.id.iv_star_5) lateinit var starViews: List<ImageView>
+    val collapsingToolbar:   CollapsingToolbarLayout? by bindOptionalView(R.id.collapsing_toolbar)  // disabled on tablets
+    val toolbar:             Toolbar                  by bindView(R.id.toolbar)
+    val progressBar:         ProgressBar              by bindView(R.id.pb_loading)
+    val coverImageView:      ImageView                by bindView(R.id.iv_cover)
+    val coverErrorTextView:  TextView                 by bindView(R.id.tv_cover_error)
+    val topOverlayView:      View                     by bindView(R.id.top_overlay)
+    val bottomOverlayView:   View                     by bindView(R.id.bottom_overlay)
+    val descriptionTextView: TextView                 by bindView(R.id.tv_description)
+    val linkTextView:        TextView                 by bindView(R.id.tv_link)
+    val genresTextView:      TextView                 by bindView(R.id.tv_genres)
+    val tracksCountTextView: TextView                 by bindView(R.id.tv_tracks_count)
+    val albumsCountTextView: TextView                 by bindView(R.id.tv_albums_count)
+    val starViews: List<ImageView> by bindViews(R.id.iv_star_1, R.id.iv_star_2, R.id.iv_star_3, R.id.iv_star_4, R.id.iv_star_5)
 
     private var strokeStar: Drawable? = null
     private var halfStar: Drawable? = null
     private var fullStar: Drawable? = null
 
     private var artistId = DomainConstant.BAD_ID
-    private var component: ArtistDetailsComponent? = null
+    private lateinit var component: ArtistDetailsComponent
+
+    companion object {
+        val EXTRA_ARTIST_ID = "extra_artist_id"
+
+        fun getCallingIntent(context: Context, artistId: Long): Intent {
+            val intent = Intent(context, ArtistDetailsActivity::class.java)
+            intent.putExtra(EXTRA_ARTIST_ID, artistId)
+            return intent
+        }
+    }
 
     override fun createPresenter(): ArtistDetailsContract.Preseneter {
         return component.presenter()
@@ -93,7 +105,7 @@ class ArtistDetailsActivity : BaseActivity<ArtistDetailsContract.View, ArtistDet
     private fun initToolbar() {
         collapsingToolbar?.setExpandedTitleTextAppearance(R.style.ExpandedAppBar)
         collapsingToolbar?.setCollapsedTitleTextAppearance(R.style.CollapsedAppBar)
-        toolbar.setNavigationOnClickListener { view ->
+        toolbar.setNavigationOnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 supportFinishAfterTransition()
             } else {
@@ -189,15 +201,5 @@ class ArtistDetailsActivity : BaseActivity<ArtistDetailsContract.View, ArtistDet
         topOverlayView.visibility = View.INVISIBLE
         bottomOverlayView.visibility = View.INVISIBLE
         coverErrorTextView.visibility = View.VISIBLE
-    }
-
-    companion object {
-        val EXTRA_ARTIST_ID = "extra_artist_id"
-
-        fun getCallingIntent(context: Context, artistId: Long): Intent {
-            val intent = Intent(context, ArtistDetailsActivity::class.java)
-            intent.putExtra(EXTRA_ARTIST_ID, artistId)
-            return intent
-        }
     }
 }

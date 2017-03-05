@@ -3,7 +3,9 @@ package com.orcchg.dev.maxa.ktmusic.app.ui.base
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
+import com.orcchg.dev.maxa.ktmusic.app.MusicApplication
 import com.orcchg.dev.maxa.ktmusic.app.injection.application.ApplicationComponent
+import com.orcchg.dev.maxa.ktmusic.app.injection.navigation.DaggerNavigationComponent
 import com.orcchg.dev.maxa.ktmusic.app.injection.navigation.NavigationComponent
 import com.orcchg.dev.maxa.ktmusic.app.navigation.NavigatorHolder
 import hugo.weaving.DebugLog
@@ -89,7 +91,7 @@ abstract class BaseDialogFragment<in V : MvpView, P : MvpPresenter<V>> : DialogF
     /* Component */
     // --------------------------------------------------------------------------------------------
     protected val applicationComponent: ApplicationComponent
-        get() = (activity.application as MusicApplication).getApplicationComponent()
+        get() = (activity.application as MusicApplication).applicationComponent
 
     /* Internal */
     // --------------------------------------------------------------------------------------------

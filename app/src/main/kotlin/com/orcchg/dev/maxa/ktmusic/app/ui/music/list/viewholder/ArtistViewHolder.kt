@@ -4,8 +4,9 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
-import butterknife.BindView
 import butterknife.ButterKnife
+import butterknife.bindOptionalView
+import butterknife.bindView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.GlideDrawable
 import com.bumptech.glide.request.RequestListener
@@ -17,18 +18,18 @@ import com.orcchg.dev.maxa.ktmusic.app.ui.viewobject.ArtistListItemVO
 
 class ArtistViewHolder(view: View, val artistClickListener: ItemClickListener) : NormalViewHolder<ArtistListItemVO>(view) {
 
-    @BindView(R.id.fl_grid_item) lateinit var gridItemView: View  // only on large screens
-    @BindView(R.id.pb_loading) lateinit var progressBar: ProgressBar
-    @BindView(R.id.iv_cover) lateinit var iconView: ImageView
-    @BindView(R.id.tv_musician_title) lateinit var titleView: TextView
+    val gridItemView: View? by bindOptionalView(R.id.fl_grid_item)  // only on large screens
+    val progressBar: ProgressBar by bindView(R.id.pb_loading)
+    val iconView: ImageView by bindView(R.id.iv_cover)
+    val titleView: TextView by bindView(R.id.tv_musician_title)
 
     init {
         ButterKnife.bind(this, view)
     }
 
     override fun bind(viewObject: ArtistListItemVO) {
-        itemView.setOnClickListener({ view -> artistClickListener.onItemClick(iconView as View, viewObject.id) })
-        gridItemView?.setOnClickListener { view -> artistClickListener.onItemClick(iconView as View, viewObject.id) }
+        itemView.setOnClickListener({ view -> artistClickListener.onItemClick(view, viewObject.id) })
+        gridItemView?.setOnClickListener { view -> artistClickListener.onItemClick(view, viewObject.id) }
 
         titleView.text = viewObject.name
 

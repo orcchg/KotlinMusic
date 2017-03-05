@@ -14,6 +14,7 @@ buildscript {
 
 repositories {
     maven { url "https://dl.bintray.com/jlmd/maven" }  // animated circle loading view
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }  // kotter knife
 //    maven { url 'https://maven.fabric.io/public' }
 }
 

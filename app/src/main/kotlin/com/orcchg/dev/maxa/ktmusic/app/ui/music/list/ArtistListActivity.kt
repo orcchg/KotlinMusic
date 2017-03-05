@@ -10,39 +10,43 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.view.View
-import butterknife.BindView
+import android.widget.Button
 import butterknife.ButterKnife
-import butterknife.OnClick
+import butterknife.bindView
 import com.orcchg.dev.maxa.ktmusic.R
 import com.orcchg.dev.maxa.ktmusic.app.ui.base.BaseActivity
 import com.orcchg.dev.maxa.ktmusic.app.ui.base.common.view.misc.GridItemDecorator
 import com.orcchg.dev.maxa.ktmusic.app.ui.base.common.view.misc.ViewUtility
 import com.orcchg.dev.maxa.ktmusic.app.ui.music.list.injection.ArtistListComponent
+import com.orcchg.dev.maxa.ktmusic.app.ui.music.list.injection.DaggerArtistListComponent
 import com.orcchg.dev.maxa.ktmusic.app.ui.viewobject.ArtistListItemVO
 import hugo.weaving.DebugLog
 import timber.log.Timber
 
 class ArtistListActivity : BaseActivity<ArtistListContract.View, ArtistListContract.Preseneter>(), ArtistListContract.View {
 
-    @BindView(R.id.toolbar) lateinit var toolbar: Toolbar
-    @BindView(R.id.rl_toolbar_dropshadow) lateinit var dropshadowView: View
-    @BindView(R.id.swipe_refresh_layout) lateinit var swipeRefreshLayout: SwipeRefreshLayout
-    @BindView(R.id.rv_items) lateinit var listView: RecyclerView
-    @BindView(R.id.empty_view) lateinit var emptyView: View
-    @BindView(R.id.loading_view) lateinit var loadingView: View
-    @BindView(R.id.error_view) lateinit var errorView: View
-    @OnClick(R.id.btn_retry)
-    fun onRetryClick() {
-        presenter.retry()
-    }
+    val toolbar:            Toolbar            by bindView(R.id.toolbar)
+    val dropshadowView:     View               by bindView(R.id.rl_toolbar_dropshadow)
+    val swipeRefreshLayout: SwipeRefreshLayout by bindView(R.id.swipe_refresh_layout)
+    val listView:           RecyclerView       by bindView(R.id.rv_items)
+    val emptyView:          View               by bindView(R.id.empty_view)
+    val loadingView:        View               by bindView(R.id.loading_view)
+    val errorView:          View               by bindView(R.id.error_view)
+    val retryButton:        Button             by bindView(R.id.btn_retry)
 
-    private var component: ArtistListComponent? = null
-    private var layoutManager: LinearLayoutManager? = null
+    private lateinit var component: ArtistListComponent
+    private lateinit var layoutManager: LinearLayoutManager
 
     private var lastVisible = -1
 
+    companion object {
+        fun getCallingIntent(context: Context): Intent {
+            return Intent(context, ArtistListActivity::class.java)
+        }
+    }
+
     override fun createPresenter(): ArtistListContract.Preseneter {
-        return component!!.presenter()
+        return component.presenter()
     }
 
     override fun injectDependencies() {
@@ -92,14 +96,14 @@ class ArtistListActivity : BaseActivity<ArtistListContract.View, ArtistListContr
         super.onStart()
         if (isStateRestored && memento.layoutManagerState != null) {
             Timber.i("Restored state of layout manager")
-            layoutManager!!.onRestoreInstanceState(memento.layoutManagerState)
+            layoutManager.onRestoreInstanceState(memento.layoutManagerState)
         }
         listView.layoutManager = layoutManager
     }
 
     @DebugLog
     override fun onSaveInstanceState(outState: Bundle) {
-        memento.layoutManagerState = layoutManager!!.onSaveInstanceState()
+        memento.layoutManagerState = layoutManager.onSaveInstanceState()
         memento.toBundle(outState)
         super.onSaveInstanceState(outState)
     }
@@ -107,6 +111,7 @@ class ArtistListActivity : BaseActivity<ArtistListContract.View, ArtistListContr
     /* View */
     // --------------------------------------------------------------------------------------------
     private fun initView() {
+        retryButton.setOnClickListener { presenter.retry() }
         swipeRefreshLayout.setColorSchemeColors(resources.getColor(R.color.colorAccent))
         swipeRefreshLayout.setOnRefreshListener { presenter.retry() }
 
@@ -180,23 +185,17 @@ class ArtistListActivity : BaseActivity<ArtistListContract.View, ArtistListContr
             return   // skip scroll up
         }
 
-        val last = layoutManager!!.findLastVisibleItemPosition()
+        val last = layoutManager.findLastVisibleItemPosition()
         if (lastVisible == last) {
             return   // skip scroll due to layout
         }
 
         lastVisible = last
-        val total = layoutManager!!.itemCount
+        val total = layoutManager.itemCount
         presenter.onScroll(total - last)
     }
 
     fun showShadow(show: Boolean) {
-        dropshadowView!!.visibility = if (show) View.VISIBLE else View.INVISIBLE
-    }
-
-    companion object {
-        fun getCallingIntent(context: Context): Intent {
-            return Intent(context, ArtistListActivity::class.java)
-        }
+        dropshadowView.visibility = if (show) View.VISIBLE else View.INVISIBLE
     }
 }
