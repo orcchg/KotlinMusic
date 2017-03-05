@@ -8,5 +8,5 @@ import javax.inject.Scope
  * correct component.
  */
 @Scope
-@kotlin.annotation.Retention(AnnotationRetention.SOURCE)
+@kotlin.annotation.Retention(AnnotationRetention.RUNTIME)
 annotation class PerActivity
