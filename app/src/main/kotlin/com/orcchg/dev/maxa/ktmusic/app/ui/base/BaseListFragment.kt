@@ -22,7 +22,7 @@ abstract class BaseListFragment<in V : MvpView, P : MvpPresenter<V>> : BaseFragm
         }
 
         companion object {
-            protected val BUNDLE_KEY_LM_STATE = "bundle_key_lm_state"
+            private val BUNDLE_KEY_LM_STATE = "bundle_key_lm_state"
 
             fun fromBundle(savedInstanceState: Bundle): Memento {
                 val memento = Memento()
@@ -92,7 +92,7 @@ abstract class BaseListFragment<in V : MvpView, P : MvpPresenter<V>> : BaseFragm
 
     protected val isListReachedBottom: Boolean
         get() {
-            val adapter = recyclerView!!.adapter
+            val adapter = recyclerView.adapter
             if (adapter != null) {
                 val totalItems = adapter.itemCount
                 return layoutManager.findLastVisibleItemPosition() == totalItems - 1
