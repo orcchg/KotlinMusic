@@ -25,6 +25,9 @@ Used technologies:
 
 =================
 Server implementation: [server](https://github.com/orcchg/MusicSquareServer)
+
+Version written in pure Java: [in java](https://github.com/orcchg/RxMusic)
+
 Older version (w/o Rx): [older](https://github.com/orcchg/MusicSquare_MVP)
 
 Apache 2.0
