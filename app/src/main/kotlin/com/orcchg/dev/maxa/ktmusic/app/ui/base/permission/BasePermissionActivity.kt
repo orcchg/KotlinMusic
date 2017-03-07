@@ -45,22 +45,22 @@ abstract class BasePermissionActivity<in V : MvpView, P : MvpPresenter<V>> : Bas
     // ------------------------------------------
     protected fun askForPermission_readExternalStorage() {
         Timber.i("askForPermission_readExternalStorage")
-//        val pm = getPermissionManagerComponent().permissionManager()
-//        if (pm.hasReadExternalStoragePermission()) {
-//            onPermissionGranted_readExternalStorage()
-//        } else {
-//            pm.requestReadExternalStoragePermission(this)
-//        }
+        val pm = permissionManagerComponent.permissionManager()
+        if (pm.hasReadExternalStoragePermission()) {
+            onPermissionGranted_readExternalStorage()
+        } else {
+            pm.requestReadExternalStoragePermission(this)
+        }
     }
 
     protected fun askForPermission_writeExternalStorage() {
         Timber.i("askForPermission_writeExternalStorage")
-//        val pm = getPermissionManagerComponent().permissionManager()
-//        if (pm.hasWriteExternalStoragePermission()) {
-//            onPermissionGranted_writeExternalStorage()
-//        } else {
-//            pm.requestWriteExternalStoragePermission(this)
-//        }
+        val pm = permissionManagerComponent.permissionManager()
+        if (pm.hasWriteExternalStoragePermission()) {
+            onPermissionGranted_writeExternalStorage()
+        } else {
+            pm.requestWriteExternalStoragePermission(this)
+        }
     }
 
     /* Permission granted */
