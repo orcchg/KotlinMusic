@@ -132,7 +132,7 @@ class ArtistListActivity : BaseActivity<ArtistListContract.View, ArtistListContr
 
     private fun initToolbar() {
         toolbar.setTitle(R.string.str_musicians_list)
-        toolbar.setNavigationOnClickListener { view -> finish() }
+        toolbar.setNavigationOnClickListener { finish() }
     }
 
     /* Contract */

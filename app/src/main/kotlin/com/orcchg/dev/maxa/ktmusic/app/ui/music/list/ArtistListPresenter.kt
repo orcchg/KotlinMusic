@@ -45,6 +45,7 @@ class ArtistListPresenter @Inject constructor(
     @DebugLog
     override fun retry() {
         dropListStat()
+        listAdapter.clear()
         freshStart()
     }
 
@@ -78,7 +79,7 @@ class ArtistListPresenter @Inject constructor(
     }
 
     override val listTag: Int
-        get() = throw UnsupportedOperationException()
+        get() = 1000
 
     override fun onLoadMore() {
         loadArtists(LIMIT_PER_REQUEST, listMemento.currentOffset, /* memento.genres */ null)
